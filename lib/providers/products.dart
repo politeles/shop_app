@@ -70,10 +70,10 @@ class Products with ChangeNotifier {
     return _items.firstWhere((element) => element.id == id);
   }
 
-  void addProduct(Product product) {
+  Future<void> addProduct(Product product) {
     final url = Uri.parse(
         'https://shopapp-fef7a-default-rtdb.europe-west1.firebasedatabase.app/products.json');
-    http
+    return http
         .post(url,
             body: json.encode({
               'title': product.title,
@@ -93,6 +93,8 @@ class Products with ChangeNotifier {
       _items.add(newProduct);
       //_items.insert(0, newProduct);//at the start of the list
       notifyListeners();
+    }).catchError((error) {
+      throw error;
     });
   }
 
