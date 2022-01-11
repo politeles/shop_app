@@ -155,6 +155,7 @@ class Products with ChangeNotifier {
     Product? existingProduct = _items[existingProductIndex];
 
     http.delete(url).then((response) {
+      print(response);
       if (response.statusCode >= 400) {
         throw HttpException('Could not delete product');
       }
@@ -162,7 +163,7 @@ class Products with ChangeNotifier {
     }).catchError((_) {
       _items.insert(existingProductIndex, existingProduct!);
     });
-    //_items.removeWhere((element) => element.id == id);
+    _items.removeWhere((element) => element.id == id);
     notifyListeners();
   }
 }
