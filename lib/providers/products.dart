@@ -25,9 +25,12 @@ class Products with ChangeNotifier {
     return _items.firstWhere((element) => element.id == id);
   }
 
-  Future<void> fectchAndSetProducts() async {
+  Future<void> fectchAndSetProducts([bool filterByUser = false]) async {
+    final filterString =
+        filterByUser ? 'orderBy="creatorId"&equalTo="$userId"' : '';
+    print('filter screen is ' + filterString);
     final url = Uri.parse(
-        'https://shopapp-fef7a-default-rtdb.europe-west1.firebasedatabase.app/products.json?auth=$token');
+        'https://shopapp-fef7a-default-rtdb.europe-west1.firebasedatabase.app/products.json?auth=$token&$filterString');
     try {
       final response = await http.get(url);
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
@@ -73,6 +76,7 @@ class Products with ChangeNotifier {
             'description': product.description,
             'imageUrl': product.imageUrl,
             'price': product.price,
+            'creatorId': userId,
             //         'isFavorite': product.isFavorite,
           }));
       final newProduct = Product(
