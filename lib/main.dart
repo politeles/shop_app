@@ -8,6 +8,7 @@ import './screens/products_overview_screen.dart';
 import './providers/products.dart';
 import './providers/cart.dart';
 import './providers/orders.dart';
+import './providers/auth.dart';
 import './screens/cart_screen.dart';
 import './screens/order_screen.dart';
 import './screens/edit_products_screen.dart';
@@ -25,6 +26,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(
+          create: (_) => Auth(),
+        ),
         ChangeNotifierProvider(
           //recommended approach
           create: (_) => Products(),
