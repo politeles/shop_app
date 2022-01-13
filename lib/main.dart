@@ -29,9 +29,13 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => Auth(),
         ),
-        ChangeNotifierProvider(
+        // it's required that the Auth provider is defined before, so the rest of the provides can depend on it
+
+        ChangeNotifierProxyProvider<Auth, Products>(
           //recommended approach
-          create: (_) => Products(),
+          create: (context) => Products('', []),
+          update: (context, auth, previousProducts) => Products(auth.token!,
+              previousProducts == null ? [] : previousProducts.items),
         ),
         ChangeNotifierProvider.value(
           value: Cart(),

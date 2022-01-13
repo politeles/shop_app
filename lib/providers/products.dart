@@ -40,7 +40,8 @@ class Products with ChangeNotifier {
           'https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Cast-Iron-Pan.jpg/1024px-Cast-Iron-Pan.jpg',
     ), */
   ];
-
+  final String token;
+  Products(this.token, this._items);
   var _showFavoritesOnly = false;
 
   /* 
@@ -74,7 +75,7 @@ class Products with ChangeNotifier {
 
   Future<void> fectchAndSetProducts() async {
     final url = Uri.parse(
-        'https://shopapp-fef7a-default-rtdb.europe-west1.firebasedatabase.app/products.json');
+        'https://shopapp-fef7a-default-rtdb.europe-west1.firebasedatabase.app/products.json?auth=$token');
     try {
       final response = await http.get(url);
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
@@ -103,7 +104,7 @@ class Products with ChangeNotifier {
 
   Future<void> addProduct(Product product) async {
     final url = Uri.parse(
-        'https://shopapp-fef7a-default-rtdb.europe-west1.firebasedatabase.app/products.json');
+        'https://shopapp-fef7a-default-rtdb.europe-west1.firebasedatabase.app/products.json?auth=$token');
     // removed the return sentence, with async is not neccesary
     // now we can use a different syntax to call response
     // to handle the error, we wrap in a try/catch block
@@ -133,7 +134,7 @@ class Products with ChangeNotifier {
 
   Future<void> updateProduct(String id, Product newProduct) async {
     final url = Uri.parse(
-        'https://shopapp-fef7a-default-rtdb.europe-west1.firebasedatabase.app/products/$id.json');
+        'https://shopapp-fef7a-default-rtdb.europe-west1.firebasedatabase.app/products/$id.json?auth=$token');
     final prodIndex =
         _items.indexWhere((element) => element.id == newProduct.id);
     if (prodIndex >= 0) {
@@ -152,7 +153,7 @@ class Products with ChangeNotifier {
   void deleteProduct(String id) {
     // optimistic delete with check
     final url = Uri.parse(
-        'https://shopapp-fef7a-default-rtdb.europe-west1.firebasedatabase.app/products/$id.json');
+        'https://shopapp-fef7a-default-rtdb.europe-west1.firebasedatabase.app/products/$id.json?auth=$token');
     final existingProductIndex =
         _items.indexWhere((element) => element.id == id);
     Product? existingProduct = _items[existingProductIndex];
