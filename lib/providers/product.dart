@@ -19,20 +19,29 @@ class Product with ChangeNotifier {
     this.isFavorite = false,
   });
 
-  Future<void> toggleFavoriteStatus(String token) async {
+  Future<void> toggleFavoriteStatus(String token, String userId) async {
     final oldStatus = isFavorite;
     isFavorite = !isFavorite;
-
+    print('toggle product called');
     final url = Uri.parse(
-        'https://shopapp-fef7a-default-rtdb.europe-west1.firebasedatabase.app/products/$id.json?auth=$token');
+        'https://shopapp-fef7a-default-rtdb.europe-west1.firebasedatabase.app/userFavorites/$userId/$id.json?auth=$token');
     try {
-      final response =
-          await http.patch(url, body: json.encode({'isFavorite': isFavorite}));
+      final response = await http.put(
+        url,
+        body: json.encode(isFavorite),
+      );
+
       if (response.statusCode >= 400) {
+        print('after webservice');
+        print(response.statusCode);
         isFavorite = oldStatus;
+      } else {
+        print('else');
       }
     } catch (error) {
       isFavorite = oldStatus;
+      print(error.toString());
+      print('error here');
     } finally {
       notifyListeners();
     }
