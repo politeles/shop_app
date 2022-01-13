@@ -35,9 +35,9 @@ class MyApp extends StatelessWidget {
           //recommended approach
           create: (_) => Products('', [], ''),
           update: (context, auth, previousProducts) => Products(
-              auth.token!,
+              auth.token ?? '',
               previousProducts == null ? [] : previousProducts.items,
-              auth.userId!),
+              auth.userId ?? ''),
         ),
         ChangeNotifierProvider.value(
           value: Cart(),
